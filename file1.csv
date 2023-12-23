@@ -1,0 +1,8 @@
+﻿date,area,location,status,sqlft,cost,noofdays,pin
+2023-12-01 00:00:00.000,mumbai,andheri east,open,600.00,800000.00,17,400069
+2023-12-01 00:00:00.000,mumbai,andheri east,open,700.00,900000.00,17,400069
+2023-12-02 00:00:00.000,mumbai,vile parle west,open,850.00,10000000.00,16,400070
+2023-12-03 00:00:00.000,mumbai,jogeshwari,open,600.00,900000.00,15,400068
+2023-12-04 00:00:00.000,mumbai,andheri west,open,900.00,10000000.00,14,400059
+2023-12-08 00:00:00.000,mumbai,vikhroli,open,800.00,900000.00,10,400069
+2023-12-11 00:00:00.000,mumbai,andheri east,open,350.00,600000.00,7,400098

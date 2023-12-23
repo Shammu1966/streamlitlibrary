@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HTML Iframes</title>
+<style>
+  .myDiv {
+
+  border: 5px outset red;
+  background-color: lightblue;
+  text-align: center;
+}
+</style>
+<style>
+  body {
+    margin: 0;
+  }
+
+  div {
+    padding: 65px;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  .one {
+    background-color: red;
+  }
+
+  .two {
+    background-color: yellow;
+  }
+
+  .three {
+    background-color: green;
+  }
+</style>
+<style>
+  body {
+    font-family: Arial;
+    color: white;
+  }
+  
+  .split {
+    height: 50%;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  
+  .left {
+    left: 0;
+    background-color: #111;
+  }
+  
+  .right {
+    right: 0;
+    background-color: #989898;
+  }
+  
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  
+  .centered img {
+    width: 150px;
+    border-radius: 50%;
+  }
+  </style>
+</head>
+<body>
+
+<div class="split left">
+  <div class="centered">
+    <iframe  src="https://www.google.com/webhp?igu=1"></iframe>
+
+  </div>
+</div>
+
+  <div class="split right">
+    <div class="centered">
+  <iframe src="https://www.google.com/webhp?igu=1"></iframe>
+</div>
+</div>
+
+
+</body>
+</html>

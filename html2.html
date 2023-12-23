@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link type="text/css" rel="stylesheet" href="main.css" />
+</head>
+<style>
+.quodrant{
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.qtop,
+.qbottom{
+    width: 100%;
+    height: 50vh;
+}
+
+.quodrant1,
+.quodrant2,
+.quodrant3,
+.quodrant4{
+    display: inline;
+    float: left;
+    width: 50%;
+    height: 100%;
+}
+
+.quodrant1{
+    top: 0;
+    left: 50vh;
+    background-color: red;
+}
+
+.quodrant2{
+    top: 0;
+    left: 0;
+    background-color: yellow;
+}
+
+.quodrant3{
+    top: 50vw;
+    left: 0;
+    background-color: blue;
+}
+
+.quodrant4{ 
+    top: 50vw;
+    left: 50vh;
+    background-color: green;
+}
+</style>
+<body>
+
+<div class='quodrant'>
+    <div class='qtop' name="qtop">
+        <div class='quodrant1'>   <iframe name="qd1" width="100%" height="100%" src="https://www.google.com/webhp?igu=1"></iframe> </div>
+        <div class='quodrant2'> 
+            <a href="https://www.google.com/webhp?igu=1" target="qd2">goole in qd2</a> <br>
+            
+          <!-- <object src="https://ubereats.com"></object> <br> 
+           <iframe name="qd3" width="90%" height="90%" src="https://www.ubereats.com/"  style="visibility:visible" ></iframe>
+           -->
+           <a href="https://www.ubereats.com/" >uber eats link</a>
+        </div>
+    </div>
+    <div class='qbottom'>
+        <div class='quodrant3'>
+           <!-- <portal id="airid"  src="https://www.youtube.com"></portal>  -->
+           
+          <!--  <portal id="reloadid" src="testobject.html"></portal><br> -->
+            <iframe name="qd3" width="100%" height="100%" src="https://www.youtube.com/embed"  style="visibility:visible" ></iframe>
+            
+        </div>
+        <div class='quodrant4'> 
+            
+            <iframe name="qd2" width="100%" height="100%" src="https://www.airtel.com/"></iframe> </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="main.js"></script>
+</body>
+</html>

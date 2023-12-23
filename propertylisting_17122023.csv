@@ -1,0 +1,4 @@
+﻿id,date,             area1,    area2,                amount,    c1,         c2,   c3,     c4, c5,      c6,                c7,            c8,   c9,   c10,   c11,   c12,    c13,    c14,   c15 ,   c16
+1,2023-12-01,mumbai,andheri east,01,800000.00,600.00,sq ft,block,sell,two bhk,empty block, floor three ,lift,open,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+2,2023-12-01,mumbai,andheri east,02,900000.00,700.00,sq ft,block,sell,three bhk,soft and fixed word roobe, floor one, car parking,open,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+3,2023-12-02,mumbai,vile parle west,03,10000000.00,850.00,sq ft,block,buy,three  bhk,empty,between first abd third floor,open,NULL,NULL,NULL,NULL,NULL,NULL,NULL
