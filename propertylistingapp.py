@@ -38,7 +38,7 @@ st.markdown(
 with st.sidebar.form("my_form"):
   add_selectbox = st.sidebar.selectbox(
     "What do you want to Do Now ?",
-    ("Choice From Below ","Add Property Listing", "View Listing", "Modify Listing")
+    ("Choice From Below ","Add Property Listing", "View Listing", "Modify Listing","Add Customer Details","Modify Customer Details","Add Property Type-sub Property","Modify Property - Sub Property ")
   )
 
 # Using "with" notation
@@ -47,6 +47,15 @@ with st.sidebar.form("my_form"):
         "Show Property from below",
         ("Latest (5 days)", "Last 15 days)", "Last 1 Month Old", "More than One Month")
     )
+    add_property_selection = st.sidebar.selectbox(
+        "Which Property ? ",
+        ("Property Type ",'Flat','Bunglow','Twin Bunglow','Row House','Land')
+        )
+    
+    add_sub_property_selection = st.sidebar.selectbox(
+        "Which Property ? ",
+        ("Property Type ",'1 BHK','2 BHK','3 BHK','4 BHK','5 BHK or More','Agricultural Land','Commercial Land','Both Type of Land','None')
+        )
 
     with st.sidebar:
        st.form_submit_button('Submit Selection')
@@ -71,8 +80,8 @@ if (add_selectbox=="Add Property Listing"):
     expectedcost = propertylistingform.number_input('Likely Expected Cost ? : ')
     totalarea = propertylistingform.number_input('Total Area ? : ')
     measurementin = propertylistingform.selectbox('Measurement In ', ['Sq Ft','Meter','Inches','Cms'])
-    typeofprop = propertylistingform.selectbox('Property Type', ['Flat','Bunglow','Twin Bunglow','Raw House','Land'])
-    subtypeprop = propertylistingform.selectbox('Sub Property Type', ['1 BHK','2 BHK','3 BHK','4 BHK','5 BHK or More','None'])
+    typeofprop = propertylistingform.selectbox('Property Type', ['Flat','Bunglow','Twin Bunglow','Row House','Land'])
+    subtypeprop = propertylistingform.selectbox('Sub Property Type', ['1 BHK','2 BHK','3 BHK','4 BHK','5 BHK or More','Agricultural Land','Commercial Land','Both Type of Land','None'])
     trantype = propertylistingform.selectbox('Transaction Type ', ['Buy','Sell','Rent','Leased ','Hire Purchase','Bank Dealing','None'])
     desc1 =  propertylistingform.text_area('Description : 1 : ')
     desc2 =  propertylistingform.text_area('Description : 2 : ')
