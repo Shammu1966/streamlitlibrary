@@ -1,0 +1,41 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Dec 28 11:29:03 2023
+
+@author: SharPrash
+"""
+
+.button {
+    position: absolute;
+    top:50%;
+    background-color:#0a0a23;
+    color: #fff;
+    border:none;
+    border-radius:10px;
+  }
+.stSlider {
+    background-color: blue;
+}
+.button[kind="primary"] {
+  background-color: orange;
+  position: absolute;
+  top:50%;
+  background-color:#0a0a23;
+  color: #fff;
+  border:none;
+  border-radius:10px;
+}
+
+.button[kind="secondary"] {
+    background-color: purple;
+    position: absolute;
+    top:50%;
+    background-color:#0a0a23;
+    color: #fff;
+    border:none;
+    border-radius:10px;
+}
+.sidebar .sidebar-content {
+    background-image: linear-gradient(#2e7bcf,#2e7bcf);
+    color: white;
+}
