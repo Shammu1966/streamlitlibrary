@@ -10,8 +10,13 @@ import streamlit as st
 import time
 import datetime
 from streamlit.logger import get_logger
-
+#import  sqlalchemy.connector 
+import pyodbc
 #from SessionState import _get_state
+with open('mycss.css') as f:
+    css = f.read()
+
+st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 LOGGER = get_logger(__name__)
 
 #state = _get_state()
@@ -19,10 +24,11 @@ LOGGER = get_logger(__name__)
 def run():
    # st.set_page_config(
         page_title="Property Listing Entry and Graphs"
+        st.write(page_title)
    #    )
     
 
-st.write("Property Listing Entry and Graphs")
+##st.write("Property Listing Entry and Graphs")
 
 st.sidebar.success("Select from Below")
 
@@ -38,7 +44,7 @@ st.markdown(
 with st.sidebar.form("my_form"):
   add_selectbox = st.sidebar.selectbox(
     "What do you want to Do Now ?",
-    ("Choice From Below ","Add Property Listing", "View Listing", "Modify Listing","Add Customer Details","Modify Customer Details","Add Property Type-sub Property","Modify Property - Sub Property ")
+    ("Choice From Below ","Add Property Listing", "View Listing", "Modify Listing","Add Customer Details","Modify Customer Details","Add Property ,sub Property","Modify Property - Sub Property ")
   )
 
 # Using "with" notation
@@ -48,17 +54,17 @@ with st.sidebar.form("my_form"):
         ("Latest (5 days)", "Last 15 days)", "Last 1 Month Old", "More than One Month")
     )
     add_property_selection = st.sidebar.selectbox(
-        "Which Property ? ",
+        "Main Property ? ",
         ("Property Type ",'Flat','Bunglow','Twin Bunglow','Row House','Land')
         )
     
     add_sub_property_selection = st.sidebar.selectbox(
-        "Which Property ? ",
+        "Sub Property ? ",
         ("Property Type ",'1 BHK','2 BHK','3 BHK','4 BHK','5 BHK or More','Agricultural Land','Commercial Land','Both Type of Land','None')
         )
 
     with st.sidebar:
-       st.form_submit_button('Submit Selection')
+       st.form_submit_button('Submit Selection', type="primary")
 
 
 
@@ -88,12 +94,60 @@ if (add_selectbox=="Add Property Listing"):
     status1 = propertylistingform.selectbox('Status Type', ['OPEN','Appointment on','None'])
     status_date = propertylistingform.date_input('Enter status date', value=datetime.datetime(2023,12,23))
    
-    submit = propertylistingform.form_submit_button('Accept Data')
+    submit = propertylistingform.form_submit_button('Accept Data', type="primary")
    
     if submit:
        propertylistingform.subheader('Saving Data')
     else:
        propertylistingform.subheader('&nbsp;')
+       
+if (add_selectbox=="Add Property ,sub Property"):
+    propertytypeform = st.form('my_property_type')
+    main_property_type = propertytypeform.text_input('Property Type','')
+    sub_property_type = propertytypeform.text_input('Sub Property Type ','')
+    property_submit = propertytypeform.form_submit_button('Accept Property Type ',type="primary")
+    if (property_submit):
+        propertytypeform.subheader('Saving Property Type and Sub Type Details ')
+        # line 1
+        @st.cache_resource
+        #myconn = sqlalchemy.connector.connect(host="localhost",user="sa",password="Myp@ssword",database="PropertyDatabase")
+        #cur = myconn.cursor()  
+        #@st.cache_data(ttl=600)
+        # cursor=conn.cursor()
+        
+        
+
+        # conn.execute("insert into propertyandsubproperty (propertytype,subpropertytype) values (" + "'" + main_property_type + "','" + sub_property_type+ "')")
+      
+        #conn.commit()
+        def init_connection():
+            return pyodbc.connect(
+            "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
+            + st.secrets["server"]
+            + ";DATABASE="
+            + st.secrets["database"]
+            + ";UID="
+            + st.secrets["username"]
+            + ";PWD="
+            + st.secrets["password"]
+            )
+
+        conn = init_connection()
+   
+        def run_query(query):
+           with conn.cursor() as cur:
+              cur.execute(query)
+              return (1) # cur.fetchall()
+
+        rows = run_query("insert into propertyandsubproperty ( propertytype,subpropertytype ) values (" + "'" + main_property_type + "','" + sub_property_type+ "')")
+        #run_query("SELECT * from propertylisting")
+# Print results.
+       # for row in rows:
+       #     st.write(f"{row[0]} has a :{row[1]}:")
+    
+        # line end
+    else:
+        propertytypeform.subheader('&nbsp;')
     
 #state.sync()    
     
