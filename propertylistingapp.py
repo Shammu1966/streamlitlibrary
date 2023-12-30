@@ -12,6 +12,9 @@ import datetime
 from streamlit.logger import get_logger
 #import  sqlalchemy.connector 
 import pyodbc
+import pandas as pd
+import numpy as np
+
 #from SessionState import _get_state
 with open('mycss.css') as f:
     css = f.read()
@@ -44,7 +47,7 @@ st.markdown(
 with st.sidebar.form("my_form"):
   add_selectbox = st.sidebar.selectbox(
     "What do you want to Do Now ?",
-    ("Choice From Below ","Add Property Listing", "View Listing", "Modify Listing","Add Customer Details","Modify Customer Details","Add Property ,sub Property","Modify Property - Sub Property ")
+    ("Choice From Below ","Add Property Listing", "View Listing", "Modify Listing","Add Customer Details","Modify Customer Details","Add Property ,sub Property","View Property Types","Modify Property - Sub Property ")
   )
 
 # Using "with" notation
@@ -60,7 +63,7 @@ with st.sidebar.form("my_form"):
     
     add_sub_property_selection = st.sidebar.selectbox(
         "Sub Property ? ",
-        ("Property Type ",'1 BHK','2 BHK','3 BHK','4 BHK','5 BHK or More','Agricultural Land','Commercial Land','Both Type of Land','None')
+        ("Sub Property Type ",'1 BHK','2 BHK','3 BHK','4 BHK','5 BHK or More','Agricultural Land','Commercial Land','Both Type of Land','None')
         )
 
     with st.sidebar:
@@ -72,6 +75,38 @@ with st.spinner("Loading..."):
        time.sleep(1)
        st.write("")
 st.sidebar.success("Done!")
+
+if (add_selectbox == "View Property Types"):
+   
+     #@st.cache_resource
+   
+     def init_connection():
+            return pyodbc.connect(
+            "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
+            + st.secrets["server"]
+            + ";DATABASE="
+            + st.secrets["database"]
+            + ";UID="
+            + st.secrets["username"]
+            + ";PWD="
+            + st.secrets["password"]
+            )
+
+     conn = init_connection()
+   
+     def run_query(query):
+           with conn.cursor() as cur:
+              cur.execute(query)
+              return cur.fetchall()
+
+     rows = run_query("SELECT * from propertyandsubproperty")
+# Print results.
+     #df = pd.DataFrame(np.random.randn(10, 5), columns=("col %d" % i 
+
+ 
+     for row in rows:
+            st.write(f"{row[0]} has a :{row[1]}:") 
+     #st.table(df)
 
 if (add_selectbox=="Add Property Listing"):
     propertylistingform = st.form('my_property_listing')
