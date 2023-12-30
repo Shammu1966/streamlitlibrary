@@ -103,6 +103,7 @@ if (add_selectbox=="Add Property Listing"):
        
 if (add_selectbox=="Add Property ,sub Property"):
     propertytypeform = st.form('my_property_type')
+    main_id = propertytypeform.text_input('Property ID','')
     main_property_type = propertytypeform.text_input('Property Type','')
     sub_property_type = propertytypeform.text_input('Sub Property Type ','')
     property_submit = propertytypeform.form_submit_button('Accept Property Type ',type="primary")
@@ -139,7 +140,7 @@ if (add_selectbox=="Add Property ,sub Property"):
               cur.execute(query)
               return (1) # cur.fetchall()
 
-        rows = run_query("insert into propertyandsubproperty ( propertytype,subpropertytype ) values (" + "'" + main_property_type + "','" + sub_property_type+ "')")
+        rows = run_query("insert into propertyandsubproperty (id, propertytype,subpropertytype ) values (" + main_id + ",'" + main_property_type + "','" + sub_property_type+ "')")
         #run_query("SELECT * from propertylisting")
 # Print results.
        # for row in rows:
