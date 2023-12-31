@@ -94,18 +94,25 @@ if (add_selectbox == "View Property Types"):
 
      conn = init_connection()
    
-     def run_query(query):
+     def run_query1(query):
            with conn.cursor() as cur:
-              cur.execute(query)
+              cur.execute(query) 
+              df=pd.DataFrame(cur.fetchall(),columns=["id","PropertyType","SubPropertytype"])
+              st.table(df)
               return cur.fetchall()
+          
+     sql_qry = pd.read_sql_query("select id,propertytype,subpropertytype from propertyandsubproperty",conn)
+     df = pd.DataFrame(sql_qry,columns=['id','propertytype','subpropertytype'])
+     st.table(df)
 
-     rows = run_query("SELECT * from propertyandsubproperty")
+     #rows = run_query("SELECT  * from propertyandsubproperty")
+     
 # Print results.
      #df = pd.DataFrame(np.random.randn(10, 5), columns=("col %d" % i 
 
- 
-     for row in rows:
-            st.write(f"{row[0]} has a :{row[1]}:") 
+     #df=pd.DataFrame(rows,columns=["id","PropertyType","SubPropertytype"])
+     #for row in rows:
+            #st.write(f"{row[0]} has a :{row[1]}:") 
      #st.table(df)
 
 if (add_selectbox=="Add Property Listing"):
