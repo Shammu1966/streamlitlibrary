@@ -47,7 +47,7 @@ st.markdown(
 with st.sidebar.form("my_form"):
   add_selectbox = st.sidebar.selectbox(
     "What do you want to Do Now ?",
-    ("Choice From Below ","Add Property Listing", "View Listing", "Modify Listing","Add Customer Details","Modify Customer Details","Add Property ,sub Property","View Property Types","Modify Property - Sub Property ")
+    ("Choice From Below ","Add Customer Code","View Customer Code" , "Modify Customer Code","Add Property Listing", "View Listing", "Modify Listing","Add Customer Details","Modify Customer Details","Add Area and Place", "View Area and Place", "Modify Area and Place", "Add Property ,sub Property","View Property Types","Modify Property - Sub Property ")
   )
 
 # Using "with" notation
@@ -65,6 +65,20 @@ with st.sidebar.form("my_form"):
         "Sub Property ? ",
         ("Sub Property Type ",'1 BHK','2 BHK','3 BHK','4 BHK','5 BHK or More','Agricultural Land','Commercial Land','Both Type of Land','None')
         )
+    
+    add_area_selection_selection = st.sidebar.selectbox(
+        "Select Area from Below ? ",
+        ("Main Area :",'Andheri East','Andheri West','Vile Parle East','Vile Parle West')
+        )
+    
+    add_sub_place_selection_selection = st.sidebar.selectbox(
+        "Select Place / Pin Code ? ",
+        ("Select place / pin code ", 'Andheri East Station' , 'Marol' ,'Juhu','None')
+        )
+    add_graph_type = st.radio(
+        "Choose a Graph Type",
+        ("Line Graph", "Bar Graph","Histogram","Pie Chart")
+    )
 
     with st.sidebar:
        st.form_submit_button('Submit Selection', type="primary")
@@ -119,8 +133,8 @@ if (add_selectbox=="Add Property Listing"):
     propertylistingform = st.form('my_property_listing')
     
     start_date = propertylistingform.date_input('Enter start date', value=datetime.datetime(2023,12,23))
-    area = propertylistingform.text_input('Your Area:', 'Area Please ? : ')
-    place = propertylistingform.text_input('Your Place:', 'Place Please ? : ')
+    area = propertylistingform.text_input('Your Area:','')
+    place = propertylistingform.text_input('Your Place:', '')
     custcode = propertylistingform.text_input('Customer Code : ','Customer Code Please ? : ')
     #"""
     #num = st.number_input("Higher precision step", min_value=1.0, max_value=5.0, step=1e-6, format="%.5f")
