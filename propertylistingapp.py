@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Dec 23 11:44:40 2023
-
-@author: SharPrash
-"""
-
-
 import streamlit as st
 import time
 import datetime
@@ -23,6 +15,24 @@ st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 LOGGER = get_logger(__name__)
 
 #state = _get_state()
+
+with open('mydatabase.txt') as datab:
+    lines = datab.readlines()
+
+# Get the number of lines read from the file
+num_lines = len(lines)
+i = 0
+##
+## in mydatabase.txt put below code
+## pcsqlserver if sql server is used in pc
+## pcmysql if mysql is used in pc
+## pcpostgres if postgres is used in pc
+## sqlserver if free server is used from free 
+##  web site like somee.com where there is no auto increment
+## mysql if free server is used for mysql
+## 
+mydatabase = lines[i]
+#st.write(mydatabase)
 
 def run():
    # st.set_page_config(
@@ -47,7 +57,7 @@ st.markdown(
 with st.sidebar.form("my_form"):
   add_selectbox = st.sidebar.selectbox(
     "What do you want to Do Now ?",
-    ("Choice From Below ","Add Customer Code","View Customer Code" , "Modify Customer Code","Add Property Listing", "View Listing", "Modify Listing","Add Customer Details","Modify Customer Details","Add Area and Place", "View Area and Place", "Modify Area and Place", "Add Property ,sub Property","View Property Types","Modify Property - Sub Property ")
+    ("Take from Here ","Add Customer Code","View Customer Code" , "Modify Customer Code","Add Property Listing", "View Listing", "Modify Listing","Add Customer Details","Modify Customer Details","Add Area and Place", "View Area and Place", "Modify Area and Place", "Add Property ,sub Property","View Property Types","Modify Property - Sub Property ")
   )
 
 # Using "with" notation
@@ -89,6 +99,27 @@ with st.spinner("Loading..."):
        time.sleep(1)
        st.write("")
 st.sidebar.success("Done!")
+
+if (add_selectbox == "Add Customer Code"):
+    def init_connection():
+           return pyodbc.connect(
+           "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
+           + st.secrets["server"]
+           + ";DATABASE="
+           + st.secrets["database"]
+           + ";UID="
+           + st.secrets["username"]
+           + ";PWD="
+           + st.secrets["password"]
+           )
+
+    conn = init_connection()
+    sql_qry = pd.read_sql_query("select customercode,customername,customercontactname from customertable",conn)
+    df = pd.DataFrame(sql_qry,columns=['code','customer name','contact person'])
+    ##st.dataframe(df.head(4), height=200)
+    st.dataframe(df, height=200)
+   ## st.table(df)
+    addcustomerform = st.form('mycustomeradd')
 
 if (add_selectbox == "View Property Types"):
    
@@ -158,9 +189,15 @@ if (add_selectbox=="Add Property Listing"):
        propertylistingform.subheader('&nbsp;')
        
 if (add_selectbox=="Add Property ,sub Property"):
-    propertytypeform = st.form('my_property_type')
-    main_id = propertytypeform.text_input('Property ID','')
+    propertytypeform = st.form('my_property_type',clear_on_submit=True)
+    main_id = st.empty()
+    main_id=""
+    main_id = propertytypeform.number_input('Property ID','')
+    main_property_type = st.empty()
+    main_property_type=""
     main_property_type = propertytypeform.text_input('Property Type','')
+    sub_property_type= st.empty()
+    sub_property_type=""
     sub_property_type = propertytypeform.text_input('Sub Property Type ','')
     property_submit = propertytypeform.form_submit_button('Accept Property Type ',type="primary")
     if (property_submit):
@@ -171,6 +208,9 @@ if (add_selectbox=="Add Property ,sub Property"):
         #cur = myconn.cursor()  
         #@st.cache_data(ttl=600)
         # cursor=conn.cursor()
+        
+        
+        
         
         
 
@@ -194,6 +234,10 @@ if (add_selectbox=="Add Property ,sub Property"):
         def run_query(query):
            with conn.cursor() as cur:
               cur.execute(query)
+             # propertytypeform.subheader('Saved Property Type and Sub Type Details Successfully... ')
+              with st.spinner("Saved Data..."):
+                 time.sleep(1)
+                 st.write("")
               return (1) # cur.fetchall()
 
         rows = run_query("insert into propertyandsubproperty (id, propertytype,subpropertytype ) values (" + main_id + ",'" + main_property_type + "','" + sub_property_type+ "')")
@@ -205,7 +249,10 @@ if (add_selectbox=="Add Property ,sub Property"):
         # line end
     else:
         propertytypeform.subheader('&nbsp;')
-    
+        
+       
+        #propertytypeform.subheader('Saved Property Type and Sub Type Details Successfully... ')
+   
 #state.sync()    
     
 if __name__=="__main__":
