@@ -31,7 +31,7 @@ i = 0
 ##  web site like somee.com where there is no auto increment
 ## mysql if free server is used for mysql
 ## 
-mydatabase = lines[i]
+mydatabase = lines[i].strip() #mydatabase = lines[i]
 #st.write(mydatabase)
 
 def run():
@@ -57,7 +57,7 @@ st.markdown(
 with st.sidebar.form("my_form"):
   add_selectbox = st.sidebar.selectbox(
     "What do you want to Do Now ?",
-    ("Take from Here ","Add Customer Code","View Customer Code" , "Modify Customer Code","Add Property Listing", "View Listing", "Modify Listing","Add Customer Details","Modify Customer Details","Add Area and Place", "View Area and Place", "Modify Area and Place", "Add Property ,sub Property","View Property Types","Modify Property - Sub Property ")
+    ("Take from Here ","Deal with Customer Code","Add Property Listing", "View Listing", "Modify Listing","Add Customer Details","Modify Customer Details","Add Area and Place", "View Area and Place", "Modify Area and Place", "Add Property ,sub Property","View Property Types","Modify Property - Sub Property ")
   )
 
 # Using "with" notation
@@ -100,8 +100,12 @@ with st.spinner("Loading..."):
        st.write("")
 st.sidebar.success("Done!")
 
-if (add_selectbox == "Add Customer Code"):
+if (add_selectbox == "Deal with Customer Code"):
+
     def init_connection():
+        #st.write(mydatabase)
+        if (mydatabase == "pcsqlserver"):  # pcsqlserver
+           #st.write("i am here")
            return pyodbc.connect(
            "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
            + st.secrets["server"]
@@ -112,14 +116,42 @@ if (add_selectbox == "Add Customer Code"):
            + ";PWD="
            + st.secrets["password"]
            )
-
+    #st.write("h0")
     conn = init_connection()
-    sql_qry = pd.read_sql_query("select customercode,customername,customercontactname from customertable",conn)
-    df = pd.DataFrame(sql_qry,columns=['code','customer name','contact person'])
+    #st.write("h1")
+    sql_qry = ""
+    if (mydatabase=="pcsqlserver"):
+       sql_qry = pd.read_sql_query("select customercode,customername,customercontactname from customertable",conn)
+       df = pd.DataFrame(sql_qry,columns=['code','customer name','contact person'])
     ##st.dataframe(df.head(4), height=200)
-    st.dataframe(df, height=200)
-   ## st.table(df)
-    addcustomerform = st.form('mycustomeradd')
+      
+       with st.container():       
+         cols= st.columns(2)
+         #cols[0], cols[1] = st.columns([3, 1])
+         col1, col2 = st.columns([4, 1])
+         #col1, col2 = st.columns([3, 1])
+         #edit_btn = cols[1,3].button("✏️ Edit")  ## , key=f"edit_{index}")
+         #delete_btn = cols[1,4].button("🗑️ Delete") ## , key=f"delete_{index}")
+    
+         with cols[0]: 
+          
+           with col1:
+                  st.dataframe(df.reset_index(drop=True), height=200)  
+                  st.markdown("### Actions")
+                  edit_btn = st.button("✏️ Edit")
+                  delete_btn = st.button("🗑️ Delete")
+
+           #edit_btn = cols[1,3].button("✏️ Edit")  ## , key=f"edit_{index}")
+           #delete_btn = cols[1,4].button("🗑️ Delete") ## , key=f"delete_{index}")
+
+           # st.dataframe(df, height=200)
+    ## st.table(df)
+         with cols[1]:
+           addcustomerform = st.form('mycustomeradd')
+         with st.container():
+            tab1,tab2,tab3= st.tabs(["Edit","Delete","Exit"])
+            with tab1:
+              st.dataframe(df.reset_index(drop=True), height=200) # st.dataframe(df, height=200)
 
 if (add_selectbox == "View Property Types"):
    
