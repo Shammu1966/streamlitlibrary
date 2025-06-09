@@ -110,7 +110,7 @@ if (add_selectbox == "Deal With Property"):
      #@st.cache_resource
      
      def init_connection1():
-         if ( mydatabase == "pcsqlserver"  or mydatabase == "serversqlserver" ):
+         if mydatabase == "pcsqlserver":
             return pyodbc.connect(
             "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
             + st.secrets["server"]
@@ -125,39 +125,16 @@ if (add_selectbox == "Deal With Property"):
      conn = init_connection1()
    
      def run_query1(query):
-         if ( mydatabase == "pcsqlserver" or mydatabase == "serversqlserver")  :
+         if mydatabase == "pcsqlserver":
            with conn.cursor() as cur:
               cur.execute(query) 
               df=pd.DataFrame(cur.fetchall(),columns=["id","PropertyType","SubPropertytype"])
               st.table(df)
               return cur.fetchall()
-          
-     def editproperty(row):
-                st.session_state["edit_id"] = row['Code']
-                st.success(f"Updated customer: {row['Code']}")
-
-     def deleteproperty(row):
-                st.session_state["delete_id"] = row['Code']
-
-     if ( mydatabase == "pcsqlserver" or mydatabase == "serversqlserver" ):     
+     if mydatabase == "pcsqlserver":     
         sql_qry = pd.read_sql_query("select id,propertytype,subpropertytype from propertyandsubproperty",conn)
         df = pd.DataFrame(sql_qry,columns=['id','propertytype','subpropertytype'])
-        # original st.table(df)
-        cp1,cp2,cp3,cp4,cp5 = st.columns([2,3,3,2,2])
-        cp1.write("ID")
-        cp1.write("Property Type")
-        cp1.write("Sub Property Type")
-        cp1.write("EDIT")
-        cp1.write("DELETE")
-        for index, row in df.iterrows():
-            cp1,cp2,cp3,cp4,cp5 = st.columns([2,3,3,2,2])
-            cp1.write(row['id'])
-            cp2.write(row['propertytype'])
-            cp3.write(row['subpropertytype'])
-            if cp4.button("Edit",key=f"edit_{index}"):
-                editproperty(row)
-            if cp5.button("Delete",key=f"delete_{index}"):
-                deleteproperty(row)
+        st.table(df)
 
      #rows = run_query("SELECT  * from propertyandsubproperty")
      
@@ -180,7 +157,7 @@ if add_selectbox == "Deal with Customer Code":
     st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
 
     def init_connection():
-        if (mydatabase == "pcsqlserver" or mydatabase == "serversqlserver" ):
+        if mydatabase == "pcsqlserver":
             return pyodbc.connect(
                 "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
                 + st.secrets["server"]
@@ -191,7 +168,7 @@ if add_selectbox == "Deal with Customer Code":
 
     conn = init_connection()
 
-    if (mydatabase == "pcsqlserver" or mydatabase == "serversqlserver"):
+    if mydatabase == "pcsqlserver":
         sql_qry = pd.read_sql_query(
             "SELECT customercode, customername, customercontactname FROM customertable", conn)
         df = pd.DataFrame(sql_qry, columns=["customercode", "customername", "customercontactname"])
@@ -253,7 +230,6 @@ if add_selectbox == "Deal with Customer Code":
      
     #with col2:
    with st.container():
-            
            st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
            st.subheader("Add Customer List")
            st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
@@ -324,7 +300,7 @@ if (add_selectbox=="Deal With Property and sub Property"):
         
         
         def init_connection2():
-          if (mydatabase == "pcsqlserver" or mydatabase == "serversqlserver" ):  
+          if mydatabase == "pcsqlserver":  
             return pyodbc.connect(
             "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
             + st.secrets["server"]
@@ -346,7 +322,7 @@ if (add_selectbox=="Deal With Property and sub Property"):
                  time.sleep(1)
                  st.write("")
               return (1) # cur.fetchall()
-        if ( mydatabase == "pcsqlserver" or mydatabase == "serversqlserver" ):
+        if mydatabase == "pcsqlserver":
           rows = run_query("insert into propertyandsubproperty (id, propertytype,subpropertytype ) values (" + main_id + ",'" + main_property_type + "','" + sub_property_type+ "')")
         #run_query("SELECT * from propertylisting")
 # Print results.
