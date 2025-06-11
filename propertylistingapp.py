@@ -58,7 +58,7 @@ st.markdown(
 with st.sidebar.form("my_form"):
   add_selectbox = st.sidebar.selectbox(
     "What do you want to Do Now ?",
-    ("Take from Here ","Deal with Customer Code","Deal With Property","Deal With Area and Place", "Deal With Property and sub Property")
+    ("Take from Here ","Deal with Customer Code","Property and Sub Property Names","Handle Customer Property")
   )
 
 # Using "with" notation
@@ -102,10 +102,10 @@ with st.spinner("Loading..."):
 st.sidebar.success("Done!")
 #st.write(add_selectbox)
    
-if (add_selectbox == "Deal With Property"):
+if (add_selectbox == "Property and Sub Property Names") : # "Deal With Property"):
      
   with st.container():
-     st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
+     #st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
 
      #@st.cache_resource
      
@@ -142,13 +142,21 @@ if (add_selectbox == "Deal With Property"):
      if ( mydatabase == "pcsqlserver" or mydatabase == "serversqlserver" ):     
         sql_qry = pd.read_sql_query("select id,propertytype,subpropertytype from propertyandsubproperty",conn)
         df = pd.DataFrame(sql_qry,columns=['id','propertytype','subpropertytype'])
+        df.columns=['id','propertytype','subpropertytype']
+        st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)   
+        st.subheader("Modify Delete Property and Sub Property List")
+        #st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
         # original st.table(df)
+       
         cp1,cp2,cp3,cp4,cp5 = st.columns([2,3,3,2,2])
+        #st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
         cp1.write("ID")
-        cp1.write("Property Type")
-        cp1.write("Sub Property Type")
-        cp1.write("EDIT")
-        cp1.write("DELETE")
+        cp2.write("Property Type")
+        cp3.write("Sub Property Type")
+        cp4.write("EDIT")
+        cp5.write("DELETE")
+        #st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
+ 
         for index, row in df.iterrows():
             cp1,cp2,cp3,cp4,cp5 = st.columns([2,3,3,2,2])
             cp1.write(row['id'])
@@ -170,9 +178,72 @@ if (add_selectbox == "Deal With Property"):
      #st.table(df)
      
   with st.container():
+    col1, col2 = st.columns(2)
+    with col1:
+       st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
+       st.subheader("Edit / Delete Property Sub Property Listing")
+       st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
+    with col2:  
+       def init_connection2():
+          if (mydatabase == "pcsqlserver" or mydatabase == "serversqlserver" ):  
+            return pyodbc.connect(
+            "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
+            + st.secrets["server"]
+            + ";DATABASE="
+            + st.secrets["database"]
+            + ";UID="
+            + st.secrets["username"]
+            + ";PWD="
+            + st.secrets["password"]
+            )
+        
+       conn = init_connection2()
+       def run_query(query):
+          with conn.cursor() as cur:
+             cur.execute(query)
+             st.subheader(query)
+            # propertytypeform.subheader('Saved Property Type and Sub Type Details Successfully... ')
+             with st.spinner("Saved Data..."):
+                time.sleep(1)
+                st.write("")
+             return (1) # cur.fetchall()
+         
+       st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
+       st.subheader("Add  Property Sub Property Listing")
+       st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
 
-    st.markdown("""<hr style="border-top: 1px dashed #bbb;">""", unsafe_allow_html=True)
+## add property sub 
 
+       propertytypeform = st.form('my_property_type',clear_on_submit=True)
+       if (mydatabase == "serversqlserver"  ): 
+          main_id = st.empty()
+          main_id=""
+          main_id = propertytypeform.number_input('Property ID',min_value=0)
+       main_property_type = st.empty()
+       main_property_type=""
+       main_property_type = propertytypeform.text_input('Property Type','')
+       sub_property_type= st.empty()
+       sub_property_type=""
+       sub_property_type = propertytypeform.text_input('Sub Property Type ','')
+       property_submit = propertytypeform.form_submit_button('Accept Property Type ',type="primary")
+       if (property_submit):
+          propertytypeform.subheader('Saving Property Type and Sub Type Details ') 
+          #qr1 = "insert into propertyandsubproperty ( propertytype,subpropertytype ) values ('"  + main_property_type + "','" + sub_property_type+ "')"
+          #propertytypeform.subheader(qr1)
+          #@st.cache_resource
+          if (mydatabase == "pcsqlserver" or mydatabase == "serversqlserver" ): 
+              if (mydatabase == "pcsqlserver"  ): 
+                  rows = run_query("insert into propertyandsubproperty ( propertytype,subpropertytype ) values ('"  + main_property_type + "','" + sub_property_type+ "')")
+              else:
+                  propertytypeform.subheader('&nbsp;')       
+              if ( mydatabase == "serversqlserver" ): 
+                  rows = run_query("insert into propertyandsubproperty (id, propertytype,subpropertytype ) values (" + main_id + ",'" + main_property_type + "','" + sub_property_type+ "')")
+              else:
+                   propertytypeform.subheader('&nbsp;')       
+
+
+
+## add property sub
      
 if add_selectbox == "Deal with Customer Code":
    
@@ -263,7 +334,7 @@ if add_selectbox == "Deal with Customer Code":
            
            submit = addcustomerform.form_submit_button("Add Customer",type="primary")
 
-if (add_selectbox=="Deal With Area and Place"): 
+if (add_selectbox== "Handle Customer Property") : #"Deal With Area and Place"): 
     propertylistingform = st.form('my_property_listing')
     
     start_date = propertylistingform.date_input('Enter start date', value=datetime.datetime(2023,12,23))
@@ -291,7 +362,7 @@ if (add_selectbox=="Deal With Area and Place"):
     else:
        propertylistingform.subheader('&nbsp;')
        
-if (add_selectbox=="Deal With Property and sub Property"):
+if (add_selectbox=="Deal With Property and sub Property"): ## ADD
     propertytypeform = st.form('my_property_type',clear_on_submit=True)
     
     main_id = st.empty()
