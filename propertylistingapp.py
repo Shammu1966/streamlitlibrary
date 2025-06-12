@@ -133,11 +133,12 @@ if (add_selectbox == "Property and Sub Property Names") : # "Deal With Property"
               return cur.fetchall()
           
      def editproperty(row):
-                st.session_state["edit_id"] = row['Code']
-                st.success(f"Updated customer: {row['Code']}")
+                st.session_state["edit_id"] = row['id']
+                st.success(f"Updated Property ID See Below : {row['id']}")
 
      def deleteproperty(row):
-                st.session_state["delete_id"] = row['Code']
+                st.session_state["delete_id"] = row['id']
+                st.success(f"Deleted Property Id See Below : {row['id']}")
 
      if ( mydatabase == "pcsqlserver" or mydatabase == "serversqlserver" ):     
         sql_qry = pd.read_sql_query("select id,propertytype,subpropertytype from propertyandsubproperty",conn)
@@ -164,6 +165,7 @@ if (add_selectbox == "Property and Sub Property Names") : # "Deal With Property"
             cp3.write(row['subpropertytype'])
             if cp4.button("Edit",key=f"edit_{index}"):
                 editproperty(row)
+                
             if cp5.button("Delete",key=f"delete_{index}"):
                 deleteproperty(row)
 
@@ -201,7 +203,7 @@ if (add_selectbox == "Property and Sub Property Names") : # "Deal With Property"
        def run_query(query):
           with conn.cursor() as cur:
              cur.execute(query)
-             st.subheader(query)
+             #st.subheader(query)
             # propertytypeform.subheader('Saved Property Type and Sub Type Details Successfully... ')
              with st.spinner("Saved Data..."):
                 time.sleep(1)
@@ -362,76 +364,7 @@ if (add_selectbox== "Handle Customer Property") : #"Deal With Area and Place"):
     else:
        propertylistingform.subheader('&nbsp;')
        
-if (add_selectbox=="Deal With Property and sub Property"): ## ADD
-    propertytypeform = st.form('my_property_type',clear_on_submit=True)
-    
-    main_id = st.empty()
-    main_id=""
-    main_id = propertytypeform.number_input('Property ID',min_value=0)
-    main_property_type = st.empty()
-    main_property_type=""
-    main_property_type = propertytypeform.text_input('Property Type','')
-    sub_property_type= st.empty()
-    sub_property_type=""
-    sub_property_type = propertytypeform.text_input('Sub Property Type ','')
-    property_submit = propertytypeform.form_submit_button('Accept Property Type ',type="primary")
-    if (property_submit):
-        propertytypeform.subheader('Saving Property Type and Sub Type Details ')
-        # line 1
-        @st.cache_resource
-        #myconn = sqlalchemy.connector.connect(host="localhost",user="sa",password="Myp@ssword",database="PropertyDatabase")
-        #cur = myconn.cursor()  
-        #@st.cache_data(ttl=600)
-        # cursor=conn.cursor()
-        
-        
-        
-        
-        
 
-        # conn.execute("insert into propertyandsubproperty (propertytype,subpropertytype) values (" + "'" + main_property_type + "','" + sub_property_type+ "')")
-      
-        #conn.commit()
-        
-        
-        def init_connection2():
-          if (mydatabase == "pcsqlserver" or mydatabase == "serversqlserver" ):  
-            return pyodbc.connect(
-            "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
-            + st.secrets["server"]
-            + ";DATABASE="
-            + st.secrets["database"]
-            + ";UID="
-            + st.secrets["username"]
-            + ";PWD="
-            + st.secrets["password"]
-            )
-        
-        conn = init_connection2()
-   
-        def run_query(query):
-           with conn.cursor() as cur:
-              cur.execute(query)
-             # propertytypeform.subheader('Saved Property Type and Sub Type Details Successfully... ')
-              with st.spinner("Saved Data..."):
-                 time.sleep(1)
-                 st.write("")
-              return (1) # cur.fetchall()
-        if ( mydatabase == "pcsqlserver" or mydatabase == "serversqlserver" ):
-          rows = run_query("insert into propertyandsubproperty (id, propertytype,subpropertytype ) values (" + main_id + ",'" + main_property_type + "','" + sub_property_type+ "')")
-        #run_query("SELECT * from propertylisting")
-# Print results.
-       # for row in rows:
-       #     st.write(f"{row[0]} has a :{row[1]}:")
-    
-        # line end
-    else:
-        propertytypeform.subheader('&nbsp;')
-        
-       
-        #propertytypeform.subheader('Saved Property Type and Sub Type Details Successfully... ')
-   
-#state.sync()    
     
 if __name__=="__main__":
    run()
