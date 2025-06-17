@@ -42,6 +42,50 @@ def run():
    #    )
     
 
+def init_connection0():
+       if ( mydatabase == "pcsqlserver"  or mydatabase == "serversqlserver" ):
+          return pyodbc.connect(
+          "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
+          + st.secrets["server"]
+          + ";DATABASE="
+          + st.secrets["database"]
+          + ";UID="
+          + st.secrets["username"]
+          + ";PWD="
+          + st.secrets["password"]
+          )
+   
+conn0 = init_connection0()
+
+def run_query0():
+        if ( mydatabase == "pcsqlserver" or mydatabase == "serversqlserver")  :
+          with conn0.cursor() as cur0:
+              
+              #query = "SELECT id, propertytype FROM propertyandsubproperty"
+              query = " select  distinct(propertytype +' ' +subpropertytype) as propertyname, id , propertytype  ,subpropertytype from propertyandsubproperty"
+              df = pd.read_sql_query(query, conn0)
+              return list(df.itertuples(index=False, name=None))  # returns list of tuples [(id, propertytype), ...]
+
+ 
+#add_property_selection = st.selectbox("Main Property", prop0, format_func=lambda x: x[1])
+
+#submitted = st.form_submit_button("Submit")
+#if submitted:
+    #property_id = add_property_selection[0]
+    #property_type = add_property_selection[1]
+    #st.write("Selected Property Type:", property_type)
+    #st.write("Selected Property ID:", property_id)
+
+
+             #query0 =   pd.read_sql_query("select id, propertytype from propertyandsubproperty",conn0)
+
+             #cur0.execute(query0) 
+             #items0 = cur0.fetchall() # [row[0] for row in conn0.fetchall()]  # Flatten the list
+
+# Use the data in a selectbox
+#selected_item = st.selectbox("Choose a product:", items)
+             #return items0 # cur0.fetchall()
+
 ##st.write("Property Listing Entry and Graphs")
 
 st.sidebar.success("Select from Below")
@@ -56,9 +100,10 @@ st.markdown(
 
 # Using object notation
 with st.sidebar.form("my_form"):
+  prop0 = run_query0()
   add_selectbox = st.sidebar.selectbox(
     "What do you want to Do Now ?",
-    ("Take from Here ","Deal with Customer Code","Property and Sub Property Names","Handle Customer Property")
+    ("Take from Here ","Deal with Customer Code","Property and Sub Property Names","Handle Customer Property","Query On Data","Reports")
   )
 
 # Using "with" notation
@@ -67,10 +112,11 @@ with st.sidebar.form("my_form"):
         "Show Property from below",
         ("Latest (5 days)", "Last 15 days)", "Last 1 Month Old", "More than One Month")
     )
-    add_property_selection = st.sidebar.selectbox(
-        "Main Property ? ",
-        ("Property Type ",'Flat','Bunglow','Twin Bunglow','Row House','Land')
-        )
+    add_property_selection=st.selectbox("Main Property",prop0,format_func=lambda x:x[2])
+    #add_property_selection = st.sidebar.selectbox(
+    #    "Main Property ? ",
+    #   ("Property Type ",'Flat','Bunglow','Twin Bunglow','Row House','Land')
+    #    )
     
     add_sub_property_selection = st.sidebar.selectbox(
         "Sub Property ? ",
